@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine</title>
+</head>
+
+<body>
+    <h1>Rule Engine</h1>
+    <div>
+        <h2>Create Rule</h2>
+        <textarea id="rule-input" rows="4" cols="50">if temperature > 30 then alert("It's hot!")</textarea>
+        <button id="create-rule-button">Create Rule</button>
+        <pre id="rule-output"></pre>
+    </div>
+
+    <div>
+        <h2>Evaluate Rule</h2>
+        <textarea id="data-input" rows="4" cols="50">{"temperature": 35}</textarea>
+        <button id="evaluate-rule-button">Evaluate Rule</button>
+        <pre id="evaluation-output"></pre>
+    </div>
+
+    <script>
+        document.getElementById('create-rule-button').addEventListener('click', async () => {
+            const ruleString = document.getElementById('rule-input').value;
+            const response = await fetch('/create_rule', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rule: ruleString })
+            });
+            const result = await response.json();
+            document.getElementById('rule-output').innerText = `Rule Created: ${result.rule_name}, AST: ${result.ast}`;
+        });
+
+        document.getElementById('evaluate-rule-button').addEventListener('click', async () => {
+            const ruleName = "rule_1";  // Change this to the created rule name
+            const dataInput = document.getElementById('data-input').value;
+
+            // Parse the user data input
+            let userData;
+            try {
+                userData = JSON.parse(dataInput);
+            } catch (error) {
+                alert("Invalid JSON format in data input.");
+                return;
+            }
+
+            const response = await fetch('/evaluate_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rule: ruleName,
+                    data: userData,
+                }),
+            });
+
+            const result = await response.json();
+            const outputDiv = document.getElementById('evaluation-output');
+
+            if (response.ok) {
+                outputDiv.textContent = `Evaluation Result: ${result.result}`;
+            } else {
+                outputDiv.textContent = `Error: ${result.error}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

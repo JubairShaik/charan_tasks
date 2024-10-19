@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Monitoring Dashboard</title>
+      <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Weather Monitoring Dashboard</h1>
+
+        <div id="weather-info">
+            <h2>Current Weather Data:</h2>
+            <p>Average Temperature: <span id="avg-temp">Loading...</span>°C</p>
+            <p>Max Temperature: <span id="max-temp">Loading...</span>°C</p>
+            <p>Min Temperature: <span id="min-temp">Loading...</span>°C</p>
+            <p>Dominant Condition: <span id="dominant-condition">Loading...</span></p>
+        </div>
+
+        <canvas id="tempChart"></canvas> <!-- Chart for temperature trends -->
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
